@@ -1,27 +1,52 @@
-import { integer, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { DAYS_OF_WEEK_IN_ORDER } from '@/data/constants';
+import { relations } from 'drizzle-orm';
+import { boolean, index, integer, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-export const usersTable = pgTable('users_table', {
-  id: serial('id').primaryKey(),
+const createdAt = timestamp('createdAt').notNull().defaultNow();
+const updatedAt = timestamp('updatedAt').notNull().defaultNow().$onUpdate(() => new Date());
+
+export const EventsTable = pgTable('events', {
+  id: uuid('id').primaryKey().defaultRandom(),
   name: text('name').notNull(),
-  age: integer('age').notNull(),
-  email: text('email').notNull().unique(),
-});
+  description: text('description'), //.notNull(),
+  durationInMinutes: integer("durationInMinutes").notNull(),
+  clerkUserId: text('clerkUserId').notNull(),
+  isActive: boolean('isActive').notNull().default(true),
+  createdAt,
+  updatedAt,
+}, table => ({
+    clerkUserIdIndex: index("clerkUserIdIndex").on(table.clerkUserId)
+}) );
 
-export const postsTable = pgTable('posts_table', {
-  id: serial('id').primaryKey(),
-  title: text('title').notNull(),
-  content: text('content').notNull(),
-  userId: integer('user_id')
+export const SchedulesTable = pgTable('schedules', {
+    id: uuid('id').primaryKey().defaultRandom(),
+    timezone: text("timezone").notNull(),
+    clerkUserId: text("clerkUserId").notNull().unique(),
+    createdAt,
+    updatedAt,
+})
+
+export const scheduleRelations = relations(SchedulesTable, ({ many }) => ({
+    avaliabilities: many(ScheduleAvailabilitiesTable)
+}))
+
+export const scheduleDayOfWeekEnum = pgEnum("day", DAYS_OF_WEEK_IN_ORDER);
+
+export const ScheduleAvailabilitiesTable = pgTable("scheduleAvailibilities", {
+    id: uuid('id').primaryKey(),
+    scheduleId: uuid("scheduleId")
     .notNull()
-    .references(() => usersTable.id, { onDelete: 'cascade' }),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at')
-    .notNull()
-    .$onUpdate(() => new Date()),
-});
+    .references(() => SchedulesTable.id, { onDelete: "cascade" }),
+    startTime: text("startTime").notNull(),
+    endTime: text("endTime").notNull(),
+    dayOfWeek: scheduleDayOfWeekEnum("dayOfWeek").notNull(),
+}, table =>  ({
+    scheduleIdIndex: index("scheduleIdIndex").on(table.scheduleId),
+}))
 
-export type InsertUser = typeof usersTable.$inferInsert;
-export type SelectUser = typeof usersTable.$inferSelect;
-
-export type InsertPost = typeof postsTable.$inferInsert;
-export type SelectPost = typeof postsTable.$inferSelect;
+export const ScheduleAvailabilitiesRelations = relations(ScheduleAvailabilitiesTable, ({ one }) => ({
+    schedule: one(SchedulesTable, {
+        fields: [ScheduleAvailabilitiesTable.scheduleId],
+        references: [SchedulesTable.id],
+    })
+}))
