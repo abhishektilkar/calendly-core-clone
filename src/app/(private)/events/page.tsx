@@ -19,7 +19,7 @@ const EventsPage = async () => {
     orderBy: ({ createdAt }, { desc }) => desc(createdAt),
   });
 
-  // console.log('events123@', events)
+  console.log('events123@', events)
 
   return (
     <>

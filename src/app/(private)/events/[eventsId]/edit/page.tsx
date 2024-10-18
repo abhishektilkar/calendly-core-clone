@@ -13,6 +13,7 @@ export default async function EditEventsPage({ params } : { params: { eventsId: 
         where: ({id, clerkUserId}, { and, eq }) => 
             and(eq(clerkUserId, userId), eq(id, eventsId))
     })
+    console.log('events123@', event)
 
     if (!event) notFound()
 

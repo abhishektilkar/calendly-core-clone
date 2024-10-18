@@ -38,5 +38,11 @@ export async function deleteEvent(id: string): Promise<{ error: boolean} | undef
     const { userId } = auth();
     if (!userId) return { error: true };
 
-    // await db.delete(EventsTable).
+    const { rowCount } = await db.delete(EventsTable)
+        .where(and(eq(EventsTable.id, id), eq(EventsTable.clerkUserId, userId)));
+
+    if(rowCount === 0) return { error: true };
+
+    redirect('/events');
+
 }
