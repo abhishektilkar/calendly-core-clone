@@ -44,7 +44,7 @@ const EventsPage = async () => {
         </>) :
         (<div className='flex flex-col items-center gap-4'>
           <CalendarRange className='size-16' />
-          You don't have any events yet. Create your first event to get started!
+          You don&apos;t have any events yet. Create your first event to get started!
           <Button size="lg" className='text-lg' asChild>
             <Link href='events/new'><CalendarPlus className='mr-4 size-6' />New Event</Link>
           </Button>

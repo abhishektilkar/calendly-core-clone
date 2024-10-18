@@ -1,5 +1,6 @@
 "use client"
-import React, { useState, useTransition } from 'react'
+import React, { useTransition } from 'react'
+// useState
 import { useForm } from 'react-hook-form';
 import { z as zod } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -11,9 +12,7 @@ import Link from 'next/link';
 import { Textarea } from '../ui/textarea';
 import { Switch } from '../ui/switch';
 import { createEvent, deleteEvent, updateEvent } from '@/server/actions/events';
-import { redirect } from 'next/navigation';
 import { AlertDialog, AlertDialogHeader, AlertDialogTrigger, AlertDialogContent, AlertDialogDescription, AlertDialogTitle, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '../ui/alert-dialog';
-
 
 const EventsForm = ({ event }: { event?: {
     id: string
@@ -26,10 +25,10 @@ const EventsForm = ({ event }: { event?: {
     const [isDeletePending, startDeleteTransition] = useTransition()
     const form = useForm<zod.infer<typeof eventsFormsSchema>>({
         resolver: zodResolver(eventsFormsSchema),
-        defaultValues: event ?? {
+        defaultValues: (event ?? {
           isActive: true,
           durationInMinutes: 30,
-        },
+        } as any),
       })
 
 
@@ -131,7 +130,8 @@ const EventsForm = ({ event }: { event?: {
                     event && (
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button asChild1 variant='destructiveGhost' disabled={isDeletePending || form.formState.isSubmitting}>
+                                <Button variant='destructiveGhost' disabled={isDeletePending || form.formState.isSubmitting}>
+                                    {/* asChild1 */}
                                     Delete
                                 </Button>
                             </AlertDialogTrigger>

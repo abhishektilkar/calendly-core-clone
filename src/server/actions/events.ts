@@ -7,8 +7,8 @@ import { auth } from '@clerk/nextjs/server';
 import { and, eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import 'use-server'
-import { string, z as zod } from 'zod'
-
+import { z as zod } from 'zod'
+// string
 export async function createEvent(unsafeData: zod.infer<typeof eventsFormsSchema>): Promise<{ error: boolean } | undefined>{
     const { userId } = auth();
     const { success, data } = eventsFormsSchema.safeParse(unsafeData);

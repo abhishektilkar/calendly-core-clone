@@ -6,7 +6,7 @@ import { notFound, redirect } from "next/navigation";
 
 export default async function EditEventsPage({ params } : { params: { eventsId: string}} ) {
     const { eventsId } = params;
-    const { userId, redirectToSignIn } = auth();
+    const { userId } = auth();
     if (userId == null) redirect('/');
 
     const event = await db.query.EventsTable.findFirst({
