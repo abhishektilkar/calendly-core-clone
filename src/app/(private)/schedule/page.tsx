@@ -12,9 +12,10 @@ const SachedulePage = async () => {
     const schedule = await db.query.SchedulesTable.findFirst({
         where: (({ clerkUserId }, { eq }) => eq(clerkUserId, userId)),
         with: {
-            avaliabilities: {
-                orderBy: (({ startTime }, { desc }) => desc(startTime))
-            }
+            avaliabilities: true
+            // {
+            //     orderBy: (({ startTime }, { desc }) => desc(startTime))
+            // }
         }
     });
 
@@ -24,7 +25,8 @@ const SachedulePage = async () => {
         <Card className='max-w-md mx-auto'>
             <CardHeader>
                 <CardTitle>
-                    New Event
+                    {/* New Event */}
+                    Schedule
                 </CardTitle>
             </CardHeader>
             <CardContent>
