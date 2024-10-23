@@ -1,3 +1,4 @@
+'use client'
 import { DAYS_OF_WEEK_IN_ORDER } from '@/data/constants'
 import { timeToInt } from '@/lib/utils'
 import { scheduleFormSchema } from '@/schema/schedule'
@@ -54,7 +55,7 @@ const ScheduleForm = ({ schedule }: { schedule?: {
               </div>
             )
           }
-          <FormField
+          {/* <FormField
             control={form.control}
             name='timezone'
             render={({ field }) => (
@@ -81,7 +82,7 @@ const ScheduleForm = ({ schedule }: { schedule?: {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
         </form>
       </Form>

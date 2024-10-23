@@ -11,28 +11,15 @@ const SachedulePage = async () => {
     if (!userId) redirect('/');
     const schedule = await db.query.SchedulesTable.findFirst({
         where: (({ clerkUserId }, { eq }) => eq(clerkUserId, userId)),
-        with: {
-            avaliabilities: true
-            // {
-            //     orderBy: (({ startTime }, { desc }) => desc(startTime))
-            // }
-        }
+        with: { avaliabilities: true }
     });
+
+    console.log('schedule', schedule);
 
   return (
     <div>
         {/* SachedulePage */}
-        <Card className='max-w-md mx-auto'>
-            <CardHeader>
-                <CardTitle>
-                    {/* New Event */}
-                    Schedule
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-                <ScheduleForm schedule={schedule} />
-            </CardContent>
-        </Card>
+        
     </div>
   )
 }
